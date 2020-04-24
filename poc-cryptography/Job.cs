@@ -32,6 +32,7 @@ namespace poc_cryptography
             {
                 var result = await _httpRequestService.GetJsonAsync();
                 await _fileService.CreateFile(result);
+
                 var decrypted = _decryptService.Decrypt(result);
                 var hash = _securityService.CreateHash(decrypted);
 
