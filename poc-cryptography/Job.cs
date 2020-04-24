@@ -31,11 +31,11 @@ namespace poc_cryptography
             try
             {
                 var result = await _httpRequestService.GetJsonAsync();
-                _fileService.CreateFile(result);
+                await _fileService.CreateFile(result);
                 var decrypted = _decryptService.Decrypt(result);
                 var hash = _securityService.CreateHash(decrypted);
 
-                _fileService.UpdateFile(decrypted, hash);
+                await _fileService.UpdateFile(decrypted, hash);
 
                 await _httpRequestService.PostAsync();
 

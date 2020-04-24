@@ -10,8 +10,8 @@ namespace poc_cryptography.Services.FileService
 {
     public interface IFileService
     {
-        void CreateFile(string text);
-        void UpdateFile(string decrypted, string hash);
+        Task CreateFile(string text);
+        Task UpdateFile(string decrypted, string hash);
         Task<byte[]> GetFile();
         FileStream GetFileStream();
     }
@@ -26,14 +26,14 @@ namespace poc_cryptography.Services.FileService
             _path = Path.Combine(_folder, _fileName);
         }
 
-        public void CreateFile(string text)
+        public async Task CreateFile(string text)
         {
             Directory.CreateDirectory(_folder);
 
             using (FileStream fs = File.Create(_path))
             {
                 byte[] data = Encoding.UTF8.GetBytes(text);
-                fs.Write(data, 0, data.Length);
+                await fs.WriteAsync(data, 0, data.Length);
                 fs.Close();
             }
         }
@@ -54,7 +54,7 @@ namespace poc_cryptography.Services.FileService
             return new FileStream(_path, FileMode.Open);
         }
 
-        public void UpdateFile(string decrypted, string hash)
+        public async Task UpdateFile(string decrypted, string hash)
         {
             var json = new Response();
 
@@ -65,18 +65,21 @@ namespace poc_cryptography.Services.FileService
                 byte[] b = new byte[1024];
                 UTF8Encoding temp = new UTF8Encoding(true);
 
-                while (fs.Read(b, 0, b.Length) > 0)
+                while (await fs.ReadAsync(b, 0, b.Length) > 0)
                 {                    
                     result.Append(temp.GetString(b));                    
                 }
+
                 json = JsonConvert.DeserializeObject<Response>(result.ToString());
                 json.Decifrado = decrypted;
-                json.Resumo_criptografico = hash;      
+                json.Resumo_criptografico = hash;  
+                
             }
+
             using (FileStream fs = File.OpenWrite(_path))
             {
                 byte[] data = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(json));
-                fs.Write(data, 0, data.Length);               
+                await fs.WriteAsync(data, 0, data.Length);               
                 fs.Close();
             }
         }
