@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using poc_cryptography.Services.DecryptService;
-using poc_cryptography.Services.HttpRequestService;
+using poc_cryptography.IoC;
 using System;
 using System.IO;
 
@@ -21,10 +20,9 @@ namespace poc_cryptography
 
         private static void ConfigureServices(IServiceCollection serviceCollection)
         {
-            serviceCollection.AddSingleton<IHttpRequestService, HttpRequestService>()
-            .AddSingleton<IJob, Job>()
-            .AddSingleton<IDecryptService, DecryptService>()
-            .BuildServiceProvider();
+            serviceCollection
+                .ServiceInjection()
+                .BuildServiceProvider();
 
             var configuration = new ConfigurationBuilder().SetBasePath(Directory.GetParent(AppContext.BaseDirectory).FullName)
                 .AddJsonFile("appsettings.json", false)
