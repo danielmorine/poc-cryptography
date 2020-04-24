@@ -34,6 +34,11 @@ namespace poc_cryptography
                 _fileService.CreateFile(result);
                 var decrypted = _decryptService.Decrypt(result);
                 var hash = _securityService.CreateHash(decrypted);
+
+                _fileService.UpdateFile(decrypted, hash);
+
+                await _httpRequestService.PostAsync();
+
             }
             catch (Exception ex)
             {
