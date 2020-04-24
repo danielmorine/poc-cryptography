@@ -1,4 +1,5 @@
 ﻿using poc_cryptography.Services.DecryptService;
+using poc_cryptography.Services.FileService;
 using poc_cryptography.Services.HttpRequestService;
 using poc_cryptography.Services.SecurityService;
 using System;
@@ -15,12 +16,14 @@ namespace poc_cryptography
         private readonly IHttpRequestService _httpRequestService;
         private readonly IDecryptService _decryptService;
         private readonly ISecurityService _securityService;
+        private readonly IFileService _fileService;
 
-        public Job(IHttpRequestService httpRequestService, IDecryptService decryptService, ISecurityService securityService)
+        public Job(IHttpRequestService httpRequestService, IDecryptService decryptService, ISecurityService securityService, IFileService fileService)
         {
             _httpRequestService = httpRequestService;
             _decryptService = decryptService;
             _securityService = securityService;
+            _fileService = fileService;
         }
 
         public async Task GetJson()
@@ -28,6 +31,7 @@ namespace poc_cryptography
             try
             {
                 var result = await _httpRequestService.GetJsonAsync();
+                _fileService.CreateFile(result);
                 var decrypted = _decryptService.Decrypt(result);
                 var hash = _securityService.CreateHash(decrypted);
             }

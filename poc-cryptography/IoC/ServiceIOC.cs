@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using poc_cryptography.Services.DecryptService;
+using poc_cryptography.Services.FileService;
 using poc_cryptography.Services.HttpRequestService;
 using poc_cryptography.Services.SecurityService;
 using System;
@@ -16,6 +17,7 @@ namespace poc_cryptography.IoC
             services.AddSingleton<IJob, Job>();
             services.AddSingleton<IDecryptService, DecryptService>();
             services.AddSingleton<ISecurityService, SecurityService>();
+            services.AddSingleton<IFileService, FileService>();
 
             return services;
         }
