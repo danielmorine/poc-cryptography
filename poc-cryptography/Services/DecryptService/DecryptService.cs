@@ -19,14 +19,14 @@ namespace poc_cryptography.Services.DecryptService
 
             foreach (var resp in decrypted.Cifrado.ToLower().ToCharArray())
             {
-                var listkill = AlphabetHelper.CreateAlphabet();
+                var alphabetList = AlphabetHelper.CreateAlphabet();
 
-                var positionI = listkill.FindIndex(x => x.Equals(resp)) + 1;
-                var removed = listkill.Count() - positionI;
+                var positionI = alphabetList.FindIndex(x => x.Equals(resp)) + 1;
+                var removed = alphabetList.Count() - positionI;
 
-                listkill.RemoveRange(positionI, removed);
+                alphabetList.RemoveRange(positionI, removed);
 
-                if (!listkill.Any(x => x.Equals(resp)))
+                if (!alphabetList.Any(x => x.Equals(resp)))
                 {
                     deciphered.Append(resp);
                     continue;
@@ -37,19 +37,19 @@ namespace poc_cryptography.Services.DecryptService
 
                     if (i == decrypted.Numero_casas)
                     {
-                        var decif = listkill.LastOrDefault();
+                        var decif = alphabetList.LastOrDefault();
                         deciphered.Append(decif);
                         continue;
                     }
-                    else if (listkill.FirstOrDefault().Equals('a') && listkill.ToArray().Length == 1)
+                    else if (alphabetList.FirstOrDefault().Equals('a') && alphabetList.ToArray().Length == 1)
                     {
-                        listkill.Remove('a');
-                        listkill.AddRange(AlphabetHelper.CreateAlphabet());
+                        alphabetList.Remove('a');
+                        alphabetList.AddRange(AlphabetHelper.CreateAlphabet());
                         continue;
                     }
 
-                    var pos = listkill.LastOrDefault();
-                    listkill.Remove(pos);
+                    var remove = alphabetList.LastOrDefault();
+                    alphabetList.Remove(alphabetList.LastOrDefault());
                 }
             }
             return deciphered.ToString();

@@ -21,11 +21,8 @@ namespace poc_cryptography.Services.HttpRequestService
         {
             using (var httpClient = new HttpClient())
             {
-
                 var response = await httpClient
                     .GetAsync(string.Format("https://api.codenation.dev/v1/challenge/dev-ps/generate-data?token={0}", _key));
-
-                var res = new Response();
 
                 if (response.IsSuccessStatusCode)
                 {
